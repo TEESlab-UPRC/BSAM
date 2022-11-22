@@ -21,9 +21,6 @@ import importlib
 import multiprocessing
 import warnings
 
-# make python treat all warnings as errors. Useful to fix them, but can be commented out if not needed
-#warnings.simplefilter("error")
-
 # modify the systems max recursion limit to fix a problem when pickling all the data into a single file caused by pickling keras models
 sys.setrecursionlimit(10000)
 class Main:
@@ -34,8 +31,7 @@ class Main:
     This class can also draw upon the matplotlib library to visualize generated results.
     """
 
-# todo - create a more consistent 'verbosity' module to handle debugging or mute it easily
-    def __init__(self, init_file = 'data/netherlands.ini', result_save_path = False, override_program_options={}):
+    def __init__(self, init_file = 'data/greece_baseline_ipto.ini', result_save_path = False, override_program_options={}):
         # first read the ini file and do any proccessing needed upon it
         self.config = configobj.ConfigObj(init_file)
         # if there are overrides, apply them by updating the config dict
@@ -89,7 +85,7 @@ class Main:
         self.current_state = None
         self.last_result = False
         self.profits=[]
-        # the savepath/savename can be overriden - todo: find a better way to handle this
+        # the savepath/savename can be overriden
         if result_save_path: self.result_save_path = result_save_path
         else: self.result_save_path = self.config['system_datapaths']['result_save_path']
         self.charts_save_path = self.config['system_datapaths']['charts_save_path']
@@ -309,8 +305,6 @@ class Main:
             self.scenario_data.update({data[0]:data[1]})
 
         # now create a dict and add to it all the paths needed to create the market and run the program
-        # TODO - split the ini into categories & add whole categories to the dict - allowing the modules to reach only what they want from the categories they are allowed
-        # thus no need to explicitly get the non-scenario variables
         market_init_data = {}
         # those are standard (no scenario)
         market_init_data.update({'use_multiprocessing':self.config['program_options']['use_multiprocessing']})
@@ -321,7 +315,6 @@ class Main:
         market_init_data.update({'learning_algorithm':self.config['program_options']['learning_algorithm']})
         market_init_data.update({'uc_module':self.config['program_options']['uc_module']})
         market_init_data.update({'load_learner_policies':self.config['program_options']['load_learner_policies']})
-        market_init_data.update({'minpower_csv_path':self.config['system_datapaths']['minpower_csv_path']})
         market_init_data.update({'agent_actions_data_path':self.config['agents_module_datapaths']['agent_actions_data_path']})
         market_init_data.update({'agent_data_data_path':self.config['agents_module_datapaths']['agent_data_data_path']})
         market_init_data.update({'dqn_model_path':self.config['agents_module_datapaths']['dqn_model_path']})
@@ -427,7 +420,6 @@ class Main:
 
 
 # RUN THE MODEL
-
 # for initial run
 override_program_options0 = {'save_results':True,
                             'learning_algorithm':'lspi',
@@ -471,5 +463,5 @@ if __name__ == '__main__':
 
     # do a run for results
     main = Main(init_file='data/greece_baseline_ipto.ini',result_save_path='data/greece/results/renewable_penetration_2022_2030.pkl', override_program_options=override_program_options1)
-    main.model_period('1/1/2022','2/1/2022',exit_when_done=False)
+    main.model_period('1/1/2022','31/1/2022',exit_when_done=False)
     # main.visualize_results(results_path='data/greece/results/renewable_penetration_2022_2030.pkl',save_folder='renewable_penetration_2022_2030',show_plots=True,agent_results=True,market_results=True,tables=True,data_temporal_resolution='A',table_data_temporal_resolution ='A')

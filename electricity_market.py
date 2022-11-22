@@ -393,7 +393,6 @@ class ElectricityMarket:
             elif agent.plant.kind == 'imports':
                 # get and set the price for the specific imports generator
                 agent.plant.cost_funct_params[1] = self.fuel.get_imports_plant_price(day,agent.plant.name,self.import_generators_data.loc[agent.plant.name,'volatility']/self.market_data.loc['imports_volatility_divisor','data1'])
-                # we could also modify the availability for the day, TODO: do so if the results are still not adequate
 
     def update_fuel_history(self,result,day):
         """

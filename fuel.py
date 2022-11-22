@@ -7,7 +7,6 @@ This module is used for containing all fuel related data and doing the needed ca
 import dataio
 import numpy
 import pandas
-import custom_functions
 import datetime
 import calendar
 import ipdb
@@ -68,7 +67,7 @@ class Fuel:
         self.wind_onshore_scenario = dataio.load_dataframe_from_csv(wind_onshore_scenario_path,None)
         self.wind_onshore_scenario['datetime'] = pandas.to_datetime(self.wind_onshore_scenario['datetime'], format='%Y-%m-%d')
         self.wind_onshore_growth = dataio.load_dataframe_from_csv(wind_onshore_growth_path)
-        # and offshore - todo handle the absence of offshore wind
+        # and offshore
         self.wind_offshore_scenario = dataio.load_dataframe_from_csv(wind_offshore_scenario_path,None)
         self.wind_offshore_scenario['datetime'] = pandas.to_datetime(self.wind_offshore_scenario['datetime'], format='%Y-%m-%d')
         self.wind_offshore_growth = dataio.load_dataframe_from_csv(wind_offshore_growth_path)
@@ -325,7 +324,7 @@ class Fuel:
         # VCmax (μέγιστο κατώφλι Προσφορών Έγχυσης Υδροηλεκτρικών Σταθμών) < Διοικητικά Οριζόμενης Μέγιστης Τιμής Προσφορών Έγχυσης (150E/MWH)
         # k1/k2 rythmos metavolis  timis
         # k1 = -(Rref-Rmin)/(r-Rmin) * ln(C2/(VCmax-C1). eg. 40% *(VCmax-C1) increase when reservoir is 30% of Rref-Rmin: k1 = 3.054
-        # k2 = -(Rmax-Rref)/(Rmax-r2) * ln (C1-VC)/C1. eg. meiwsi  sto 60%*C1 when res is 70% of Rmax-Rref : k2 = -ln(0.4)/0.3 = 3.054
+        # k2 = -(Rmax-Rref)/(Rmax-r2) * ln (C1-VC)/C1. eg. decrease to 60%*C1 when res is 70% of Rmax-Rref : k2 = -ln(0.4)/0.3 = 3.054
         """
         water_reservoir_price = 0
         vcmax = self.hydro_price_variables.value.loc['vcmax']
