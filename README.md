@@ -1,5 +1,4 @@
-![BSAM-02](https://user-images.githubusercontent.com/118806905/203372286-8e3e1c7e-d0b9-40aa-a747-61ba200552f8.jpg)
-A wholesale electricity market simulator
+![BSAM-02](https://user-images.githubusercontent.com/118806905/203372644-3c420cbb-8b71-411d-b99c-bd82f6d0df55.jpg)
 
 ## Contents
 - [Contents](#contents)
