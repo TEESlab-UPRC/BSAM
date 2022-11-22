@@ -1,4 +1,4 @@
-![BSAM-02](https://user-images.githubusercontent.com/118806905/203372644-3c420cbb-8b71-411d-b99c-bd82f6d0df55.jpg)
+![BSAM-02](https://user-images.githubusercontent.com/118806905/203372814-297aeb0f-8c47-425b-85f0-fa3965e2e8c2.jpg)
 
 ## Contents
 - [Contents](#contents)
