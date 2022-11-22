@@ -5,9 +5,7 @@
 - [About](#about)
 - [Quick start](#quick-start)
 - [Documentation](#documentation)
-- [Contributing](#contributing)
-- [What's new](#whats-new)
-- [Citing Calliope](#citing-calliope)
+- [Citing BSAM](#citing-bsam)
 - [License](#license)
 
 ## About
