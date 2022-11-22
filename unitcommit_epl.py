@@ -800,69 +800,6 @@ class UnitCommit:
         else:
             return self.do_economic_dispatch(commitment=commitment)[1]
 
-
-    def do_economic_dispatch_binary(self, commitment):
-        """
-        Unutilized because slower than the other version
-        """
-
-        smp = pandas.Series(index=self.day_demand.index,name='smp')
-
-        for period in self.day_demand.index:
-            # 1. get some boundaries for smp. Those can be the min & max costs of the cost list
-            # filter out all noncommited plants as well as the virtual plant from the power cost list
-            commited_plants = commitment.commitment_values.loc[period,:].loc[commitment.commitment_values.loc[period,:] > 0].index.tolist()
-            power_cost = self.power_cost.loc[self.power_cost.loc[:,'generator'].isin(commited_plants)]
-            real_power_costs = power_cost.loc[power_cost.loc[:,'mw_unit_cost'] < 1E20].loc[:,'mw_unit_cost']
-            # the real_power_costs list is sorted so we know the upper/lower boundary values
-            smp_max = real_power_costs.iloc[-1]
-            smp_min = real_power_costs.iloc[0]
-
-            # 2. start binary search loop
-            # initialize smp
-            smp.loc[period] = numpy.round((smp_max+smp_min)/2,3)
-            # check smp for feasibility
-            for plantname in commited_plants:
-                # filter out all segments under this smp
-                active_power_costs = power_cost.loc[power_cost.loc[:,'mw_unit_cost'] <= smp.loc[period]]
-                # and filter out all segments that have a higher segment of the same generator
-                # sort segments by generator
-                active_power_costs = active_power_costs.sort_values(['generator','segment_pmax'],ascending=False)
-                active_power_costs = active_power_costs.drop_duplicates(subset='generator', keep='first')
-                # get the available power boundary defined by the last (most expensive) unit segment
-                max_power = active_power_costs.loc[:,'segment_pmax'].sum()
-                min_power = active_power_costs.iloc[:-1].loc[:,'segment_pmax'].sum() + active_power_costs.iloc[-1].loc['segment_pmin']
-
-                # check if a solution was found
-                # a solution is valid only if the last bid can be partially or fully cleared
-                if max_power >= self.day_demand.loc[period,'demand'] and min_power <= self.day_demand.loc[period,'demand']:
-                    # if we found the solution, apply the power to all generators
-                    for index in active_power_costs.index[:-1]:
-                        plant = self.all_generators_by_name[active_power_costs.loc[index,'generator']]
-                        plant.online_data.loc[period,'power'] = active_power_costs.loc[index,'segment_pmax']
-                    # the last generator may have less generation than segement_pmax
-                    plant = self.all_generators_by_name[active_power_costs.loc[active_power_costs.index[-1],'generator']]
-                    plant.online_data.loc[period,'power'] = active_power_costs.loc[index,'segment_pmax'] - (max_power - self.day_demand.loc[period,'demand'])
-                    # stop here
-                    break
-                # if available power does not suffice to meed demand, increase the smp
-                elif max_power < self.day_demand.loc[period,'demand']:
-                    smp.loc[period] = numpy.round((smp_max+smp.loc[period])/2,3)
-                # if available power is more than the demand, decrease the smp
-                elif min_power > self.day_demand.loc[period,'demand']:
-                    smp.loc[period] = numpy.round((smp.loc[period]+smp_min)/2,3)
-
-        # now that the dispatch was completed, also get the real cost of the system
-        # this cost will not equal smp * demand because (1) startup costs were not taken into account and (2) the problem is non-convex
-        # at such an instance, all commited generators with energy unit cost higher than the smp will be remunerated at their bid
-        final_cost = self.calculate_final_cost(smp)
-
-        # save the final cost to the related series, to cut down on calculations
-        self.calculated_commitments_dispatch_costs.loc[self.current_commitment.commitment_hash()] = final_cost
-
-        # and return the data
-        return smp,final_cost
-
     def do_economic_dispatch(self, commitment):
         """
         Do an economic dispatch on the commitment given, apply it to the generators and find the marginal price (price to get 1 more unit of power)
@@ -974,17 +911,6 @@ class UnitCommit:
         for plant in plants:
             cost += plant.calculate_one_day_income(smp)
         multiprocessing_costs.put(cost)
-
-    def test_solution(self):
-        """
-        Check that generation equals demand as needed
-        """
-        generation = pandas.Series(0,index=self.day_demand.loc[0:23,"demand"].index)
-        for agent in self.single_plant_agents:
-            generation += agent.plant.online_data.loc[0:23,'power']
-        if not numpy.isclose(generation.sum(),self.day_demand.loc[:,"demand"].sum()):
-            print("Generation does not match demand. Starting debugger")
-            import ipdb;ipdb.set_trace()
 
     def test_solution_generators(self):
         """

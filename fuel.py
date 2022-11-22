@@ -229,29 +229,6 @@ class Fuel:
         self.daily_hydro_generation = []
         self.daily_hydro_cost = []
 
-    def get_nat_gas_contribution(self, day):
-        """
-        Returns the percent of total production done by natural gas burning capacities
-        Within the last years_back_to_check years
-        If there is not enough data available, only the known data is used
-        """
-        # this is the date where our needed data ends
-        data_end_date = datetime.datetime(day.year,day.month,1)
-        # those are the years we need to take into account at calculation (years_back_to_check that are within the modelled period)
-        last_check_year = day.year
-        for check_year in range(int(self.market_data.loc['years_back_to_check_for_nat_gas_contribution','data1'])):
-            # if the year was modelled, this is the new last_check_year
-            if day.year - check_year in self.valid_years_to_model:
-                last_check_year = day.year - check_year
-            # if not, the last_check_year is the last valid one - the current one at the least
-            else:
-                break
-        # now we know the exact date to start calculating the average
-        data_start_date = datetime.datetime(last_check_year, day.month, 1)
-        # and just get the data from the self.nat_gas_contribution dataframe of daily resolution
-        nat_gas_contribution = numpy.average(self.nat_gas_contribution.loc[data_start_date:data_end_date,'natural_gas_contribution'])
-        return nat_gas_contribution
-
     def calculate_thermal_monthly_ref_price(self, day, agents):
         """
         Returns the monthly average of the hourly variable cost of the thermal plants, for the same month of last year,
@@ -390,17 +367,6 @@ class Fuel:
                     modifier = numpy.random.normal(0,self.hydro_basins_levels_initial.loc[month,basin+'_water_lvl_volatility']/2) # underestimate by 50% to smoothen the changes
                     new_reservoir_levels.loc[month,basin+'_water_lvl'] = (self.hydro_basins_levels_initial.loc[month,basin+'_water_lvl'] + modifier).round()
         return new_reservoir_levels
-
-    def calculate_imports_cost(self, day):
-        """
-        Calculates the cost of imports by assuming that they are lower than the day-ahead price forecast for the day by a specified margin (self.imports_price_mod)
-        This is because the imports will definitely have a cost lower than the day-ahead price forecast (which is the price of exports)
-        but it is impossible to say how much less unless we know the actual price
-        """
-        # TODO: calculate the actual price as a weighted average of all interconnected countries
-        # for the day get the day-ahead price and multiply with imports_price_mod
-        imports_cost_per_gwh = self.day_ahead_prices.loc[day.date].mean() * (1 - self.imports_price_mod)
-        return imports_cost_per_gwh
 
     def get_hydro_generator_price(self,plant,day,start_day):
         """

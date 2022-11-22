@@ -18,11 +18,6 @@ def load_dataframe_from_csv(path, index_col=0, header='infer'):
 def load_dataframe_from_excel(path, sheet, header=9, index=[0]):
     return pandas.read_excel(path, sheetname=sheet, header=header ,index_col=index)
 
-def load_json(path):
-    with open (path) as json_data:
-        json_data = json.load(json_data)
-    return json_data
-
 def load_object(saved_path, zipped=False):
     if zipped in ['gzip','xz']:
         return load_zipped_pickle(saved_path,zipped)
@@ -61,10 +56,6 @@ def save_dataframe_to_csv(dataframe, path, index_label, index=True):
 def save_dataframe_to_excel(dataframe, path, sheet, startrow=9):
     dataframe.to_excel(path, sheet, index_label='label', merge_cells=False, startrow=startrow)
 
-def write_json(json_data, path):
-    with open (path,"w") as new_json:
-        json.dump(json_data, new_json, sort_keys=True, indent=4)  # dump in human-readable format to get pretty JSON
-
 def save_object(data,save_path='data/results/results_pickled.dat',zipped=False):
     if zipped in ['gzip','xz']:
         save_zipped_pickle(data,save_path,zipped)
@@ -87,16 +78,6 @@ def save_all_agents_policies(learner,single_plant_agents):
 
 def save_numpy_array(array_path, array):
     numpy.save(array_path, array, allow_pickle=False)
-
-def save_temporary_modelling_state(main, zipped=False):
-    """Saves the current state of the main modelling function so that we can resume if something happens"""
-    # we just need to save the main object, as it actually includes all the information needed
-    if zipped == 'gzip':
-        save_gzipped_pickle(main,main.temp_file)
-    elif zipped == 'lzma':
-        save_lzma_pickle(main,main.temp_file)
-    else:
-        pickle.dump(main,open(main.temp_file, "wb"))
 
 def save_zipped_pickle(obj,filename,zip_type):
     filename +='.'+zip_type

@@ -58,8 +58,6 @@ class Main:
         if self.config['program_options']['clear_learner_policies']:
             if self.config['program_options']['learning_algorithm'] == 'lspi':
                 dataio.delete_files_in_folder(self.config['agents_module_datapaths']['lspi_policy_path'])
-            elif self.config['program_options']['learning_algorithm'] == 'dqn':
-                dataio.delete_files_in_folder(self.config['agents_module_datapaths']['dqn_model_path'])
             self.config['program_options']['load_learner_policies'] = False
 
         # determine the exact scenario to be able to create the correct market - only one scenario per market instance allowed
@@ -317,8 +315,6 @@ class Main:
         market_init_data.update({'load_learner_policies':self.config['program_options']['load_learner_policies']})
         market_init_data.update({'agent_actions_data_path':self.config['agents_module_datapaths']['agent_actions_data_path']})
         market_init_data.update({'agent_data_data_path':self.config['agents_module_datapaths']['agent_data_data_path']})
-        market_init_data.update({'dqn_model_path':self.config['agents_module_datapaths']['dqn_model_path']})
-        market_init_data.update({'roth_erev_model_path':self.config['agents_module_datapaths']['roth_erev_model_path']})
         market_init_data.update({'lspi_policy_path':self.config['agents_module_datapaths']['lspi_policy_path']})
         market_init_data.update({'generators_path':self.config['scenario_datapaths']['generators_path']})
         market_init_data.update({'market_data_path':self.config['scenario_datapaths']['market_data_path']})
@@ -464,4 +460,4 @@ if __name__ == '__main__':
     # do a run for results
     main = Main(init_file='data/greece_baseline_ipto.ini',result_save_path='data/greece/results/renewable_penetration_2022_2030.pkl', override_program_options=override_program_options1)
     main.model_period('1/1/2022','31/1/2022',exit_when_done=False)
-    # main.visualize_results(results_path='data/greece/results/renewable_penetration_2022_2030.pkl',save_folder='renewable_penetration_2022_2030',show_plots=True,agent_results=True,market_results=True,tables=True,data_temporal_resolution='A',table_data_temporal_resolution ='A')
+    main.visualize_results(results_path='data/greece/results/renewable_penetration_2022_2030.pkl',save_folder='renewable_penetration_2022_2030',show_plots=True,agent_results=True,market_results=True,tables=True,data_temporal_resolution='A',table_data_temporal_resolution ='A')

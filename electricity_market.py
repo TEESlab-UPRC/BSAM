@@ -13,13 +13,6 @@ import numpy
 import datetime
 import fuel as fuel_module
 
-# in addition to those imports, to avoid importing unneeded modules, only one of:
-#import unitcommit_epl
-#import unitcommit_milp
-#import unitcommit_minpower
-# will be invoked, depending on the learner selected
-# this happens within __init__
-
 class ElectricityMarket:
     """
     ElectricityMarket is an object containing an instance of the electricity market, namely:
@@ -94,7 +87,7 @@ class ElectricityMarket:
         generators_list = self.get_generators(dataio.load_dataframe_from_csv(market_init_data['generators_path'], None), market_init_data['enabled_generator_kinds'])
 
         self.single_plant_agents = self.initialize_agents(market_init_data['agent_actions_data_path'], market_init_data['agent_data_data_path'],
-                                generators_list, market_init_data['learning_algorithm'], market_init_data['roth_erev_model_path'], market_init_data['dqn_model_path'], \
+                                generators_list, market_init_data['learning_algorithm'], \
                                 market_init_data['lspi_policy_path'], market_init_data['load_learner_policies'], market_init_data['uc_verbosity'])
 
         # if specified, create an res_exports plant to absorb res production when it exceeds demand - demand*reserve
@@ -111,9 +104,6 @@ class ElectricityMarket:
         if self.uc_module == 'epl':
             import unitcommit_epl
             self.uc_solver = unitcommit_epl.UnitCommit(self.reserve_margins, self.backup_reserves, self.generator_long_term_availability, market_init_data['uc_verbosity'], market_init_data['use_multiprocessing'])
-        elif self.uc_module == 'milp':
-            import unitcommit_milp
-            self.uc_solver = unitcommit_milp.UnitCommit(self.reserve_margins, self.backup_reserves, self.generator_long_term_availability, market_init_data['uc_verbosity'])
 
     def get_generators(self, generators_data, enabled_generator_kinds):
         """
@@ -241,7 +231,7 @@ class ElectricityMarket:
                     import ipdb;ipdb.set_trace()
 
     def initialize_agents(self, agent_actions_data_path, agent_data_datapath, generators_list, learning_algorithm, \
-                            roth_erev_model_path, dqn_model_path, lspi_policy_path, load_learner_policies, verbosity):
+                            lspi_policy_path, load_learner_policies, verbosity):
         """
         Initialize and return the market agents, each one owning a generator
         """
@@ -249,8 +239,8 @@ class ElectricityMarket:
         print ("Creating agents and loading saved agent policies as necessary")
         for plant in generators_list:
             current_agents.append(agents.Single_Plant_Agent(agent_actions_data_path, agent_data_datapath, plant, \
-                                self.plant_closing_data, self.demand, learning_algorithm, roth_erev_model_path, \
-                                dqn_model_path, lspi_policy_path, load_learner_policies, self.market_data, verbosity))
+                                self.plant_closing_data, self.demand, learning_algorithm, \
+                                lspi_policy_path, load_learner_policies, self.market_data, verbosity))
         return current_agents
 
 

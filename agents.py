@@ -13,13 +13,6 @@ import dataio
 import numpy
 import datetime
 import pandas
-# in addition to those imports, to avoid importing unneeded modules, only one of:
-#import roth_erev
-#import lspi
-#import dqn
-# will be invoked, depending on the solver selected
-# this happens within __init__
-
 
 class Single_Plant_Agent:
     """
@@ -31,7 +24,7 @@ class Single_Plant_Agent:
     so the power offered is always the max, while the decision only refers to the price offered.
     """
     def __init__(self, agent_actions_data_path, agent_data_datapath, plant, plant_closing_data,
-                    demand, learning_algorithm, roth_erev_model_path, dqn_model_path, \
+                    demand, learning_algorithm,\
                     lspi_policy_path, load_learner_policies, market_data, verbosity):
         """
         At init load the possible actions and initialize the proper learner/deciding algorithm,
@@ -79,10 +72,6 @@ class Single_Plant_Agent:
         self.model_path = ''
         if self.learning_algorithm == 'lspi':
             self.model_path = lspi_policy_path
-        elif self.learning_algorithm == 'dqn':
-            self.model_path = dqn_model_path
-        elif self.learning_algorithm == 'roth-erev':
-            self.model_path = roth_erev_model_path
         # load the learning algorithm we want to use
         # first get the samples count up to now
         samples_count = 0
@@ -91,20 +80,7 @@ class Single_Plant_Agent:
             sample_count_path = self.model_path + 'sample_count' + '.npy'
             samples_count = dataio.load_numpy_array(sample_count_path)
             samples_count = samples_count[0]
-        if self.learning_algorithm == 'roth-erev':
-            import roth_erev
-            # if we got saved propensities, load them. else create them from scratch (propensities=False)
-            propensities = False
-            if load_learner_policies:
-                # if roth_erev_propensities_path or roth_erev_sample_count_path are not pointing to a file,
-                # false will be returned
-                roth_erev_propensities_path = self.model_path + self.plant.name + '.npy'
-                propensities = dataio.load_numpy_array(roth_erev_propensities_path)
-            # load the roth-erev constants and create an instance of the related
-            # class, specifically for this agent
-            # our learner is the roth_erev object
-            self.learner = roth_erev.VariantRothErev(self.agent_data, self.actions_list, propensities, last_action, samples_count)
-        elif self.learning_algorithm == 'lspi':
+        if self.learning_algorithm == 'lspi':
             import lspi
             # if we got a saved lspi policy load it. else create a new policy (lspi_policy=false)
             lspi_policy = False
@@ -115,28 +91,9 @@ class Single_Plant_Agent:
                 lspi_policy = dataio.load_numpy_array(lspi_policy_path)
             # our learner is the lspi object
             self.learner = lspi.LSPI(self.agent_data, self.actions_list, self.plant, lspi_policy, last_action, samples_count, self.verbosity)
-        elif self.learning_algorithm == 'dqn':
-            import dqn
-            # if we got a saved dqn model (weights and all) load it. else create a new one
-            dqn_model_path = False
-            if load_learner_policies:
-                # if dqn_model_path or lspi_sample_count_path are not pointing to a file, false will be returned
-                dqn_model_path = self.model_path + self.plant.name + '.h5'
-            self.learner = dqn.Dqn(self.agent_data, self.actions_list, self.plant, dqn_model_path, last_action, samples_count)
         else:
             # this means no learner is used - everyone working at the MC - using a dummy learner provided by this module
             self.learner = No_Learner(samples_count)
-
-    # This is unused for now
-    def get_possible_power_availability(self):
-        """
-        Read the max power possible for each of the 8 linearized segments
-        Unused until agents also make availability offers
-        """
-        max_power_available = []
-        for segment in self.plant.marginal_costs:
-            max_power_available.append(segment[1]/self.plant.pmax)
-        return max_power_available
 
     def closing_down_decision(self,last_date,valid_years_to_model):
         """
@@ -223,12 +180,6 @@ class Single_Plant_Agent:
         if self.learning_algorithm == 'lspi':
             lspi_policy_path = self.model_path + self.plant.name+'.npy'
             dataio.save_numpy_array(lspi_policy_path, self.learner.weights)
-        elif self.learning_algorithm == 'dqn':
-            dqn_model_path = self.model_path + self.plant.name+'.h5'
-            self.learner.model.save(dqn_model_path)
-        elif self.learning_algorithm == 'roth-erev':
-            roth_erev_model_path = self.model_path + self.plant.name+'.npy'
-            dataio.save_numpy_array(roth_erev_model_path, self.learner.propensities)
 
     def save_sample_count(self):
         """
