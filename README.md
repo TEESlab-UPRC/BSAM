@@ -7,6 +7,7 @@
 - [Documentation](#documentation)
 - [Citing BSAM](#citing-bsam)
 - [License](#license)
+- [Acknowledgements](#acknowledgements)
 
 ## About
 BSAM is an agent-based electricity wholesale market simulation model which simulates the operations within a power pool central dispatch Day Ahead Market. The model simulates electricity generators as entities who progressively learn to bid their capacities in a day-ahead competitive wholesale market, with ultimate goal the maximization of their profits. In parallel, a unit commitment and economic dispatch algorithm calculates the cost-optimal power mix to satisfy demand, the quantities injected by each generation unit, the market clearing price, as well as, derived outputs such as CO2 emissions and profits of each generator. The model can support cost-benefit analysis of future policy and/or technology deployment scenarios.
@@ -42,3 +43,8 @@ The **BSAM source code**, consisting of the *.py* files, is licensed under the M
 >OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 >SOFTWARE.
 The input data contained in the **Data** folder are collected through publicly available sources, or are modified/simplified versions of private data. BSAM license does not apply to input data.
+
+## Acknowledgements
+The development of BSAM has been partially funded by the following sources:
+* The EC funded Horizon 2020 Framework Programme for Research and Innovation (EU H2020) Project titled "Sustainable energy transitions laboratory" (SENTINEL) with grant agreement No. 837089
+* The EC funded Horizon 2020 Framework Programme for Research and Innovation (EU H2020) Project titled "Transition pathways and risk analysis for climate change policies" (TRANSrisk) with grant agreement No. 642260
