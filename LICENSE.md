@@ -1,5 +1,5 @@
 The **BSAM source code**, consisting of the *.py* files, is licensed under the MIT license:
->MIT License
+>MIT License 
 >
 >Copyright (c) 2022 TEESlab-UPRC
 >
