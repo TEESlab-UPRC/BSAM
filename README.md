@@ -15,7 +15,7 @@ It consists of three modules: (i) a wholesale electricity market module which mo
 
 ## Citing BSAM
 In academic literature please cite BSAM as: 
->[![article DOI](https://img.shields.io/badge/article-10.1016/j.egyr.2021.07.052-blue)](https://doi.org/10.1016/j.egyr.2021.07.052): Kontochristopoulos, Y., Michas, >S., Kleanthis, N., & Flamos, A. (2021). Investigating the market effects of increased RES penetration with BSAM: A wholesale electricity market simulator. *Energy >Reports*, *7*, 4905-4929. [https://doi.org/10.1016/j.egyr.2021.07.052](https://doi.org/10.1016/j.egyr.2021.07.052)
+>[![article DOI](https://img.shields.io/badge/article-10.1016/j.egyr.2021.07.052-blue)](https://doi.org/10.1016/j.egyr.2021.07.052): Kontochristopoulos, Y., Michas, S., Kleanthis, N., & Flamos, A. (2021). Investigating the market effects of increased RES penetration with BSAM: A wholesale electricity market simulator. *Energy Reports*, *7*, 4905-4929. [https://doi.org/10.1016/j.egyr.2021.07.052](https://doi.org/10.1016/j.egyr.2021.07.052)
 
 
 ## License
