@@ -21,4 +21,4 @@ The **BSAM source code**, consisting of the *.py* files, is licensed under the M
 >OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 >SOFTWARE.
 
-The input data contained in the ***Data*** folder are collected through publicly available sources, or are modified/simplified versions of private data, and are licensed under the [CC-BY-4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode).
+The input data contained in the **Data** folder are collected through publicly available sources, or are modified/simplified versions of private data. BSAM license does not apply to input data.
