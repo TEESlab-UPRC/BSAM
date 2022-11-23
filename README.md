@@ -13,4 +13,31 @@ BSAM is an agent-based electricity wholesale market simulation model which simul
 
 It consists of three modules: (i) a wholesale electricity market module which models the market operations (i.e. setting of the power market needs, enforcement of market price caps, determination of water prices, etc.), (ii) an agent-based module which models the bidding behaviour of electricity generating resources (as self-learning profit-maximizing agents) participating in a Day-Ahead competitive wholesale electricity market, and (iii) a unit commitment module that calculates the cost-optimal commitment and dispatch of generating resources. BSAM is written in Python and combines a reinforcement learning approach to model agent-based decision-making, with heuristic algorithms enabling fast and accurate simulations of the Unit Commitment and Economic Dispatch problems. It is maintained by the [Techno-Economics of Energy Systems laboratory (TEESlab)](https://teeslab.unipi.gr) at the University of Piraeus and is freely available on GitHub. 
 
+## Citing BSAM
+ In academic literature please cite BSAM as [![article DOI](https://img.shields.io/badge/article-10.1016/j.egyr.2021.07.052-blue)](https://doi.org/10.1016/j.egyr.2021.07.052): Kontochristopoulos, Y., Michas, S., Kleanthis, N., & Flamos, A. (2021). Investigating the market effects of increased RES penetration with BSAM: A wholesale electricity market simulator. *Energy Reports*, *7*, 4905-4929. [https://doi.org/10.1016/j.egyr.2021.07.052](https://doi.org/10.1016/j.egyr.2021.07.052)
+
+
 ## License
+The **BSAM source code**, consisting of the *.py* files, is licensed under the MIT license:
+>MIT License 
+>
+>Copyright (c) 2022 TEESlab-UPRC
+>
+>Permission is hereby granted, free of charge, to any person obtaining a copy
+>of this software and associated documentation files (the "Software"), to deal
+>in the Software without restriction, including without limitation the rights
+>to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+>copies of the Software, and to permit persons to whom the Software is
+>furnished to do so, subject to the following conditions:
+>
+>The above copyright notice and this permission notice shall be included in all
+>copies or substantial portions of the Software.
+>
+>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+>IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+>FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+>AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+>LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+>SOFTWARE.
+The input data contained in the **Data** folder are collected through publicly available sources, or are modified/simplified versions of private data. BSAM license does not apply to input data.
