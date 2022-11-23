@@ -218,7 +218,7 @@ class Fuel:
         for period in smp.index:
             smp_data = [smp.loc[period],daily_smp]
             current_datetime = datetime.datetime(day.year,day.month,day.day,period)
-            self.calculated_smp = self.calculated_smp.append(pandas.DataFrame([smp_data],index=[current_datetime],columns=self.calculated_smp.columns))
+            self.calculated_smp = pandas.concat([self.calculated_smp, pandas.DataFrame([smp_data],index=[current_datetime],columns=self.calculated_smp.columns)])
 
     def reset_averages(self):
         """

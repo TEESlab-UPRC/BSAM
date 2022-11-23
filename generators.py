@@ -67,7 +67,7 @@ class Generator:
         # units start recommitable
         self.online_data.loc[:,'can_recommit'] = 1
         # convert the power column to float
-        self.online_data.loc[:,'power'] = self.online_data.power.astype(float)
+        self.online_data['power'] = self.online_data.power.astype(float)
         # available_power is a pandas series containing the pmax of the plant on any given period based on plant availability. assumed max initially
         self.available_power = pandas.Series(self.pmax, index = pandas.Index(numpy.arange(-1,25)), name = 'period')
         # available pmin must also be scaled
@@ -316,7 +316,7 @@ class Generator:
         # create a new series to store problems (initialize with 0)
         uptime_problem_periods = pandas.Series(0,index=self.online_data.index,name='uptime_problem_periods')
         # the last period need not be checked individually as the 25th hour is full of 0s - check everything else
-        for period, uptime in self.online_data.loc[-1:23,'uptime'].iteritems():
+        for period, uptime in self.online_data.loc[-1:23,'uptime'].items():
             if uptime > 0 and self.online_data.loc[period+1,'uptime'] == 0 and uptime < self.min_uptime and period+1 !=24:
                 uptime_problem_periods.loc[period] = 1
         return uptime_problem_periods
@@ -329,7 +329,7 @@ class Generator:
         # create a new series to store problems (initialize with 0)
         downtime_problem_periods = pandas.Series(0,index=self.online_data.index,name='downtime_problem_periods')
         # the last period need not be checked individually as the 25th hour is full of 0s - check everything else
-        for period, downtime in self.online_data.loc[-1:23,'downtime'].iteritems():
+        for period, downtime in self.online_data.loc[-1:23,'downtime'].items():
             if downtime > 0 and self.online_data.loc[period+1,'downtime'] == 0 and downtime < self.min_downtime and period+1 !=24:
                 downtime_problem_periods.loc[period] = 1
         return downtime_problem_periods
@@ -362,7 +362,7 @@ class Generator:
         variable_costs = pandas.Series(0,index=numpy.arange(24))
         # vplants have near inf variable cost. no need to calculate. reported as 0
         if self.kind != 'virtual':
-            for period,generated_power in self.online_data.loc[0:23].loc[self.online_data.loc[0:23,'power']>=self.available_min_power.loc[0:23],'power'].iteritems():
+            for period,generated_power in self.online_data.loc[0:23].loc[self.online_data.loc[0:23,'power']>=self.available_min_power.loc[0:23],'power'].items():
                 for segment_index in reversed(self.marginal_costs.index):
                     if generated_power >= self.marginal_costs.loc[segment_index,'segment_pmin'] and \
                             generated_power <= self.marginal_costs.loc[segment_index,'segment_pmax']:
@@ -382,7 +382,7 @@ class Generator:
         # also calculate the energy cost
         energy_costs = 0
         # if we want the income, we only have to multiply the online_data['power'] with the smp and sum
-        for period,generated_power in self.online_data.loc[0:23].loc[self.online_data.loc[0:23,'power']>=self.available_min_power.loc[0:23],'power'].iteritems():
+        for period,generated_power in self.online_data.loc[0:23].loc[self.online_data.loc[0:23,'power']>=self.available_min_power.loc[0:23],'power'].items():
             for segment_index in reversed(self.marginal_costs_by_profit_daily.index):
                 if generated_power >= self.marginal_costs_by_profit_daily.loc[segment_index,'segment_pmin'] and \
                         generated_power <= self.marginal_costs_by_profit_daily.loc[segment_index,'segment_pmax']:

@@ -168,7 +168,7 @@ class UnitCommit:
         # sort costs ascending
         power_cost.sort_values('mw_unit_cost',inplace=True,ascending=True)
         # round all values to 3 decimals
-        power_cost.loc[:,'mw_unit_cost'] = numpy.round(power_cost.loc[:,'mw_unit_cost'].values.tolist(),3)
+        power_cost['mw_unit_cost'] = numpy.round(power_cost.loc[:,'mw_unit_cost'].values.tolist(),3)
         # fix the df index
         power_cost.reset_index(drop=True,inplace=True)
         # and return

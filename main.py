@@ -159,7 +159,7 @@ class Main:
                 # calculate the profit of the last action
                 profit = agent.calculate_profit(self.last_result[2])
                 # update the taken_actions list of the agent.
-                agent.taken_actions=agent.taken_actions.append(pandas.DataFrame([[agent.learner.current_action[0],agent.learner.current_action[1],profit]],index=[day-datetime.timedelta(days=1)],columns=['action','exploit_status','profit']))
+                agent.taken_actions = pandas.concat([agent.taken_actions, pandas.DataFrame([[agent.learner.current_action[0],agent.learner.current_action[1],profit]],index =[day-datetime.timedelta(days=1)],columns=['action','exploit_status','profit'])])
                 # choose a new action (plant data automatically updated)
                 agent.choose_new_action(profit, self.last_state, self.current_state)
                 # reset any profit penalties so that next day we'll start clean
