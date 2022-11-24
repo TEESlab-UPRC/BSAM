@@ -459,5 +459,5 @@ if __name__ == '__main__':
 
     # do a run for results
     main = Main(init_file='data/greece_baseline_ipto.ini',result_save_path='data/greece/results/renewable_penetration_2022_2030.pkl', override_program_options=override_program_options1)
-    main.model_period('1/1/2022','31/1/2022',exit_when_done=False)
+    main.model_period('1/1/2022','31/12/2030',exit_when_done=False)
     main.visualize_results(results_path='data/greece/results/renewable_penetration_2022_2030.pkl',save_folder='renewable_penetration_2022_2030',show_plots=True,agent_results=True,market_results=True,tables=True,data_temporal_resolution='A',table_data_temporal_resolution ='A')
