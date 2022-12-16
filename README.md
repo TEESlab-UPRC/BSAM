@@ -22,7 +22,7 @@ It consists of three modules: (i) a wholesale electricity market module which mo
 * Type python main.py to run the preconfigured example
 
 ## Documentation
-Read the full [documentation](https://teeslab.unipi.gr/wp-content/uploads/2022/11/BSAM-Documentation_v1.0.pdf)
+Read the full [documentation](http://teeslab.unipi.gr/bsam-documentation_v1-0/)
 
 ## Citing BSAM
 In academic literature please cite BSAM as: 
