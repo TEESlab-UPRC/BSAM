@@ -1,0 +1,3 @@
+# These owners will be the default owners for everything in this repository (https://github.com/TEESlab-UPRC/BSAM.git).
+# Order is important; the last matching pattern takes the most precedence.
+*       @makismichas @TEESlab-UPRC
